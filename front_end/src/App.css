@@ -12,11 +12,7 @@
   padding: 0;
   margin-left: 0;
 }
-/* .topdiv{
-  height: 500px !important;
-  overflow: auto;
-  
-} */
+
 .question{
   font-weight: 700;
   font-size: 30px;
@@ -59,6 +55,10 @@
 .trow{
   border-bottom: 1px solid #ddd;
   padding: 20px;
+}
+.trow:hover{
+  border-radius: 3px;
+  box-shadow: 3px 3px 5px #666;
 }
 .tbody{
   padding: 15px;
@@ -113,7 +113,7 @@ box-shadow: 3px 3px 5px #666;;
   padding: 5px 15px 5px;
   transition: background-color .3s ease;
   border-radius: 3px;
-  box-shadow: 3px 3px 5px #666;;
+  box-shadow: 3px 3px 5px #666;
 }
 .btnask:hover{
   opacity: .8;
@@ -122,4 +122,7 @@ box-shadow: 3px 3px 5px #666;;
   transition: all .1s;
   transform: translate(1px,1px);
   box-shadow: 0px 0px 0px;
+}
+select, option {
+  width: 100%
 }

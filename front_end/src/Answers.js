@@ -1,40 +1,35 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import './App.css';
 import Table from 'react-bootstrap/Table'
-import { format, formatDistance, formatRelative, subDays } from 'date-fns'
-import differenceInCalendarDays from 'date-fns/differenceInCalendarDays'
-import App from './App';
 import { faThumbsUp, faThumbsDown } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { withRouter } from 'react-router-dom';
 
 
 class Answers extends React.Component {
-    constructor() {
-        super()
+    constructor(props) {
+        super(props)
         this.state = {
             answers: [],
-            question: [],
-            helpful: 0,
-            nothelpful: 0
+            question: []
         }
     }
 
 
     componentDidMount = () => {
-        if (this.props.match.params.questionid !== undefined){
-        fetch('http://201.0.0.114:8080/answers/answer/' + this.props.match.params.questionid)
-            .then(response => response.json())
-            .then(data => this.setState({ answers: data }));
+        if (this.props.match.params.questionid !== undefined) {
+            fetch('http://201.0.0.114:8080/answers/answer/' + this.props.match.params.questionid)
+                .then(response => response.json())
+                .then(data => this.setState({ answers: data }));
 
-        fetch('http://201.0.0.114:8080/questions/' + this.props.match.params.questionid)
-            .then(response => response.json())
-            .then(data2 => this.setState({ question: data2 }))
+            fetch('http://201.0.0.114:8080/questions/' + this.props.match.params.questionid)
+                .then(response => response.json())
+                .then(data2 => this.setState({ question: data2 }))
+        }
     }
-}
 
     componentDidUpdate = (prevprops) => {
-        if (prevprops.match.params.questionid !== this.props.match.params.questionid) {
+        if (prevprops.location.pathname !== this.props.location.pathname) {
             fetch('http://201.0.0.114:8080/answers/answer/' + this.props.match.params.questionid)
                 .then(response => response.json())
                 .then(data => this.setState({ answers: data }));
@@ -56,39 +51,53 @@ class Answers extends React.Component {
     }
 
     helpful = (num, ans) => {
+        const tmpanswers = [...this.state.answers]
+        if (num === "1") {
+            fetch('http://201.0.0.114:8080/answers/helpful/' + ans, {
+                method: 'POST'
+            }).then(() => {
+                fetch('http://201.0.0.114:8080/answers/answer/' + this.props.match.params.questionid)
+                    .then(response => response.json())
+                    .then(data => this.setState({ answers: data }));
+            })
+        }
+        else {
+            fetch('http://201.0.0.114:8080/answers/nothelpful/' + ans, {
+                method: 'POST'
+            }).then(() => {
+                fetch('http://201.0.0.114:8080/answers/answer/' + this.props.match.params.questionid)
+                    .then(response => response.json())
+                    .then(data => this.setState({ answers: data }));
+            })
+        }
+    }
 
-            if (num === "1"){
-                fetch('http://201.0.0.114:8080/answers/helpful/' + ans, {
-                    method: 'POST'
-                });
-            }
-            else{
-                fetch('http://201.0.0.114:8080/answers/nothelpful/' + ans, {
-                    method: 'POST'
-                });
-            }
+    redirectme = () => {
+        return this.props.history.push({
+            pathname: '/postanswer/' + this.props.match.params.questionid,
+            state: { questionid: this.props.match.params.questionid }
+        })
     }
 
     render() {
-        const { answers, question, helpful } = this.state;
-        if (this.props.match.params.questionid != null) {
+        const { answers, question } = this.state;
+        if (this.props.match.params.questionid != null && answers.length > 0) {
             return (
                 <div className="topdiv">
-                    <a className="question">{question.question}</a><br></br>
-                    <a className="askedby">Asked by </a> <a className="user">{question.username}</a> <a className="qdate">· {question.questiondate}</a>
+                    <span className="question">{question.question}</span><br></br>
+                    <span className="askedby">Asked by </span> <span className="user">{question.username}</span> <span className="qdate">· {question.questiondate}</span>
                     <br></br><br></br>
                     {this.answeramount()}
                     <Table className="table" striped="true" responsive="true">
                         <tbody className="tbody">
-                            {answers.map(answers => {
+                            {answers.map((answers, i) => {
                                 return (
-                                    <tr className="trow">
+                                    <tr className="trow" key={i}>
                                         <br></br>
                                         <p className="top"><span className="answeruser">{answers.username}</span> <span className="answerdate">{answers.date}</span></p>
                                         {answers.answer}<br></br><br></br>
-                                        <button className="thumbup" onClick={() => {this.helpful("1", answers.id)}}><FontAwesomeIcon icon={faThumbsUp} /> Helpful {answers.helpful}</button>
-                                        <button className="thumbdown" onClick={() => this.helpful("2", answers.id)}><FontAwesomeIcon icon={faThumbsDown} /> Not Helpful {answers.nothelpful}</button>
-                                        <br></br><br></br>
+                                        <button className="thumbup" onClick={() => { this.helpful("1", answers.id) }}><FontAwesomeIcon icon={faThumbsUp} /> Helpful {answers.helpful}</button>
+                                        <button className="thumbdown" onClick={() => this.helpful("2", answers.id)}><FontAwesomeIcon icon={faThumbsDown} /> Not Helpful {answers.nothelpful}</button>                                        <br></br><br></br>
                                     </tr>
                                 )
                             })}
@@ -96,15 +105,28 @@ class Answers extends React.Component {
                     </Table>
                     <section>
                         <p className="provideanswer">Provide an answer:</p>
-                        <button className="btnprovide">Post an Answer</button>
+                        <button className="btnprovide" onClick={() => this.redirectme()}>Post an Answer</button>
                     </section>
                 </div>);
         }
+        else if (this.props.match.params.questionid != null && answers.length === 0) {
+            return (
+                <section>
+                    <span className="question">{question.question}</span><br></br>
+                    <span className="askedby">Asked by </span> <span className="user">{question.username}</span> <span className="qdate">· {question.questiondate}</span>
+                    <br></br><br></br>
+                    <p className="provideanswer">Be the first to answer!</p>
+                    <button className="btnprovide" onClick={() => this.redirectme()}>Post an Answer</button>
+                </section>
+            )
+        }
         else {
             return (
-                <h2>Ask or Select a Question to get Started!</h2>
+                <div>
+                    <h2>Ask or Select a Question to get Started!</h2>
+                </div>
             )
         }
     }
 }
-export default Answers;
+export default withRouter(Answers);

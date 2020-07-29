@@ -7,6 +7,7 @@ import Row from 'react-bootstrap/Row'
 import './index.css';
 import App from './App';
 import Answers from './Answers'
+import Postanswer from './Postanswer'
 import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(
@@ -17,12 +18,12 @@ ReactDOM.render(
           <Col className="home" lg={3}>
           <App />
           </Col>
-          <Col className="answerscom" lg={5}>
+          <Col className="answerscom" lg={3}>
             <Switch>
               <Route exact path="/question/:questionid" component={Answers} />
               <Route exact path="/" component={Answers} />
+              <Route path="/postanswer/:questionid" component={Postanswer} />
             </Switch>
-
           </Col>
         </Router>
       </Row>

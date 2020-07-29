@@ -39,8 +39,8 @@ class App extends React.Component {
                 id="questionselect"
                 onChange = {this.handleChange}>
                 <option value="default">Select a question...</option>
-                {questions.map(item =>
-                  <option value={item.id}>{item.question}</option>
+                {questions.map((item,i) =>
+                  <option value={item.id} key={i}>{item.question}</option>
                 )}
               </select>
               <section className="qsection">

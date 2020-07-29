@@ -29,7 +29,7 @@ public class AnswersController {
         return this.repository.findByquestionid(answerid);
     }
 
-    //POST a question
+    //POST a answer
     @PostMapping("/{questionid}")
     @CrossOrigin
     public QAtables.Answers create(@PathVariable Long questionid, @RequestBody QAtables.Answers answer) {
