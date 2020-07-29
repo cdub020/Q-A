@@ -53,4 +53,9 @@ public class AnswersController {
         this.repository.save(answerdel.get());
     }
 
+    @DeleteMapping("/delete/{answerid}")
+    @CrossOrigin
+    public void delanswer(@PathVariable Long answerid){
+        this.repository.deleteById(answerid);
+    }
 }

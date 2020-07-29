@@ -52,14 +52,18 @@
 .top .answeruser{
   font-weight: bold;
 }
+.delete{
+  float: right;
+  border: none;
+  margin-top: 6px;
+  margin-right: 10px;
+  background: transparent;
+}
 .trow{
   border-bottom: 1px solid #ddd;
   padding: 20px;
 }
-.trow:hover{
-  border-radius: 3px;
-  box-shadow: 3px 3px 5px #666;
-}
+
 .tbody{
   padding: 15px;
 }

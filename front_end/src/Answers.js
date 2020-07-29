@@ -1,9 +1,10 @@
 import React from 'react';
 import './App.css';
 import Table from 'react-bootstrap/Table'
-import { faThumbsUp, faThumbsDown } from '@fortawesome/free-solid-svg-icons';
+import { faThumbsUp, faThumbsDown, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { withRouter } from 'react-router-dom';
+import swal from 'sweetalert';
 
 
 class Answers extends React.Component {
@@ -72,6 +73,32 @@ class Answers extends React.Component {
         }
     }
 
+    deleteanswer = (answerid) => {
+        swal({
+            title: "Are you sure?",
+            text: "Once deleted, your review will be gone forever!",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+            .then((willDelete) => {
+                if (willDelete) {
+                    fetch('http://201.0.0.114:8080/answers/delete/' + answerid, {
+                        method: 'DELETE'
+                    }).then(() => {
+                        fetch('http://201.0.0.114:8080/answers/answer/' + this.props.match.params.questionid)
+                            .then(response => response.json())
+                            .then(data => this.setState({ answers: data }));
+                    })
+                    swal("Review Deleted!", {
+                        icon: "success",
+                    });
+                } else {
+                    swal("No reviews deleted :(");
+                }
+            });
+    }
+
     redirectme = () => {
         return this.props.history.push({
             pathname: '/postanswer/' + this.props.match.params.questionid,
@@ -97,7 +124,9 @@ class Answers extends React.Component {
                                         <p className="top"><span className="answeruser">{answers.username}</span> <span className="answerdate">{answers.date}</span></p>
                                         {answers.answer}<br></br><br></br>
                                         <button className="thumbup" onClick={() => { this.helpful("1", answers.id) }}><FontAwesomeIcon icon={faThumbsUp} /> Helpful {answers.helpful}</button>
-                                        <button className="thumbdown" onClick={() => this.helpful("2", answers.id)}><FontAwesomeIcon icon={faThumbsDown} /> Not Helpful {answers.nothelpful}</button>                                        <br></br><br></br>
+                                        <button className="thumbdown" onClick={() => this.helpful("2", answers.id)}><FontAwesomeIcon icon={faThumbsDown} /> Not Helpful {answers.nothelpful}</button>
+                                        <button className="delete" onClick={() => this.deleteanswer(answers.id)}><FontAwesomeIcon icon={faTrash} className="delete" /></button>
+                                        <br></br><br></br>
                                     </tr>
                                 )
                             })}
