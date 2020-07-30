@@ -99,6 +99,9 @@ transition: background-color .3s ease;
 border-radius: 3px;
 box-shadow: 3px 3px 5px #666;;
 }
+.btnlogout{
+  margin-right : 30px;
+}
 .btnprovide:hover{
   opacity: .8;
 }
@@ -129,4 +132,8 @@ box-shadow: 3px 3px 5px #666;;
 }
 select, option {
   width: 100%
+}
+
+.btnlogin {
+  margin-right : 10px;
 }

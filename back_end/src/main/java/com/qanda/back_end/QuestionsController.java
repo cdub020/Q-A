@@ -4,6 +4,7 @@ import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -24,6 +25,13 @@ public class QuestionsController {
     @CrossOrigin
     public Optional<QAtables.Questions> getquestionbyid(@PathVariable Long questionid) {
         return this.repository.findById(questionid);
+    }
+
+    //GET questions by username
+    @GetMapping("/user/{username}")
+    @CrossOrigin
+    public List<QAtables.Questions> getbyuser(@PathVariable String username) {
+        return this.repository.findByusername(username);
     }
 
     //POST a question

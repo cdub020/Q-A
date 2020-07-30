@@ -5,6 +5,8 @@ import { faThumbsUp, faThumbsDown, faTrash } from '@fortawesome/free-solid-svg-i
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { withRouter } from 'react-router-dom';
 import swal from 'sweetalert';
+import Cookies from 'js-cookie';
+
 
 
 class Answers extends React.Component {
@@ -105,6 +107,15 @@ class Answers extends React.Component {
         })
     }
 
+    usercheck = (user) => {
+        if (Cookies.get('username') === user.username || Cookies.get('username') === undefined){
+            return (
+                <button className="delete" onClick={() => this.deleteanswer(user.id)}><FontAwesomeIcon icon={faTrash} className="delete" /></button>
+            )
+        }
+    }
+
+
     render() {
         const { answers, question } = this.state;
         if (this.props.match.params.questionid != null && answers.length > 0) {
@@ -122,11 +133,11 @@ class Answers extends React.Component {
                                         <br></br>
                                         <p className="top"><span className="answeruser">{answers.username}</span> <span className="answerdate">{answers.date}</span></p>
                                         {answers.answer}<br></br><br></br>
-                                        <button className="thumbup" onClick={() => { this.helpful("1", answers.id) }}><FontAwesomeIcon icon={faThumbsUp} /> Helpful {answers.helpful}</button>
+                                        <button className="thumbup" onClick={() => this.helpful("1", answers.id)}><FontAwesomeIcon icon={faThumbsUp} /> Helpful {answers.helpful}</button>
                                         <button className="thumbdown" onClick={() => this.helpful("2", answers.id)}><FontAwesomeIcon icon={faThumbsDown} /> Not Helpful {answers.nothelpful}</button>
-                                        <button className="delete" onClick={() => this.deleteanswer(answers.id)}><FontAwesomeIcon icon={faTrash} className="delete" /></button>
-                                        <br></br><br></br>
-                                    </tr>
+                                        {this.usercheck(answers)}
+                                        <br /><br />
+                                   </tr>
                                 )
                             })}
                         </tbody>
