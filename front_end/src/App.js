@@ -4,8 +4,8 @@ import {withRouter} from 'react-router-dom'
 import './App.css';
 
 class App extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       questions: [],
       question : 0
@@ -17,6 +17,13 @@ class App extends React.Component {
       .then(response => response.json())
       .then(data => this.setState({ questions: data }))
   }
+  componentDidUpdate = (prevprops) => {
+    if (prevprops.location.pathname !== this.props.location.pathname) {
+        fetch('http://201.0.0.114:8080/questions')
+            .then(response => response.json())
+            .then(data2 => this.setState({ questions: data2 }))
+    }
+}
 
   handleChange = (event) => {
     this.setState({question : event.target.value})
