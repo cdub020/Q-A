@@ -1,9 +1,6 @@
 import React from 'react';
-import Container from 'react-bootstrap/Container'
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Col from 'react-bootstrap/Col'
-import Row from 'react-bootstrap/Row'
-import { BrowserRouter as Router, Switch, withRouter, Redirect, Route } from 'react-router-dom'
+import {withRouter} from 'react-router-dom'
 import './App.css';
 
 class App extends React.Component {
@@ -11,7 +8,6 @@ class App extends React.Component {
     super();
     this.state = {
       questions: [],
-      answers : [],
       question : 0
     }
   }
@@ -27,8 +23,12 @@ class App extends React.Component {
     return this.props.history.push('/question/' + event.target.value);
   }
 
+  redirectme = () => {
+    return this.props.history.push('/questions')
+}
+
   render() {
-    const { questions, answers } = this.state;
+    const { questions } = this.state;
     return (
       <div className="App">
               <h4>Q & A About This Flight!</h4>
@@ -46,7 +46,7 @@ class App extends React.Component {
               <section className="qsection">
                 <br></br>
                 <h6>Don't see your question? Ask away!</h6>
-                <button className="btnask">Ask a Question</button>
+                <button className="btnask" onClick={()=> this.redirectme()}>Ask a Question</button>
               </section>
       </div>
     );

@@ -52,7 +52,6 @@ class Answers extends React.Component {
     }
 
     helpful = (num, ans) => {
-        const tmpanswers = [...this.state.answers]
         if (num === "1") {
             fetch('http://201.0.0.114:8080/answers/helpful/' + ans, {
                 method: 'POST'

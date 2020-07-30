@@ -8,6 +8,7 @@ import './index.css';
 import App from './App';
 import Answers from './Answers'
 import Postanswer from './Postanswer'
+import Postquestion from './Postquestion'
 import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(
@@ -22,7 +23,8 @@ ReactDOM.render(
             <Switch>
               <Route exact path="/question/:questionid" component={Answers} />
               <Route exact path="/" component={Answers} />
-              <Route path="/postanswer/:questionid" component={Postanswer} />
+              <Route exact path="/postanswer/:questionid" component={Postanswer} />
+              <Route exact path="/questions" component={Postquestion} />
             </Switch>
           </Col>
         </Router>

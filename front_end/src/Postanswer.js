@@ -51,9 +51,9 @@ class Postanswer extends React.Component {
                 helpful: 0,
                 nothelpful: 0
             })
-        })
-        swal("Answer Saved!", "Press OK to continue...");
-        return this.props.history.push('/')
+        }).then(() => swal("Answer Saved!", "Press OK to continue..."))
+        .then(() => this.props.history.goBack())
+
     }
 
     render() {
